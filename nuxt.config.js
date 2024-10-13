@@ -1,17 +1,20 @@
 export default {
-    target: 'static',
+    target: 'server',
+    ssr: true,
     components: true,
+
     modules: [
+        '@nuxt/image',
         '@nuxt/content'
     ],
-    content: {
-        // Options
+
+    plugins: [
+        '~/plugins/contentLoader.js'
+    ],
+
+    build: {
+        transpile: ['vue-instantsearch', 'instantsearch.js/es'],
     },
-    generate: {
-        async routes() {
-            const { $content } = require('@nuxt/content')
-            const files = await $content('posts').only(['slug']).fetch()
-            return files.map(file => `/posts/${file.slug}`)
-        }
-    }
-}
+
+    compatibilityDate: '2024-10-13'
+};

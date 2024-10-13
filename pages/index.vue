@@ -1,21 +1,19 @@
 <template>
     <div>
-        <h1>My Blog</h1>
+        <h1>Welcome to My Blog</h1>
         <ul>
             <li v-for="post in posts" :key="post.slug">
-                <NuxtLink :to="`/posts/${post.slug}`">{{ post.title }}</NuxtLink>
+                <nuxt-link :to="`/blog/${post.slug}`">{{ post.title }}</nuxt-link>
             </li>
         </ul>
     </div>
 </template>
-
-<script>
-import { defineComponent } from '@nuxtjs/composition-api'
-
-export default defineComponent({
+  
+  <script>
+export default {
     async asyncData({ $content }) {
-        const posts = await $content('posts').only(['title', 'slug']).fetch()
+        const posts = await $content('posts').fetch()
         return { posts }
-  }
-})
+    }
+}
 </script>
