@@ -1,26 +1,49 @@
 <template>
     <div>
-      <h2>Client-side rendered component</h2>
-      <p>Current time: {{ currentTime }}</p>
+      <h3>Comments</h3>
+      <ul>
+        <li v-for="comment in comments" :key="comment.id">
+          {{ comment.text }}
+        </li>
+      </ul>
+      <form @submit.prevent="addComment">
+        <input v-model="newComment" placeholder="Add a comment" />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   </template>
   
   <script>
-  import { defineComponent, ref, onMounted } from 'vue'
+  import { defineComponent, ref, onMounted } from '@nuxtjs/composition-api'
   
   export default defineComponent({
-    setup() {
-      const currentTime = ref('')
+    props: ['postId'],
+    setup(props) {
+      const comments = ref([])
+      const newComment = ref('')
   
       onMounted(() => {
-        currentTime.value = new Date().toLocaleTimeString()
-        setInterval(() => {
-          currentTime.value = new Date().toLocaleTimeString()
-        }, 1000)
+        // Simulating API call to fetch comments
+        comments.value = [
+          { id: 1, text: 'Great post!' },
+          { id: 2, text: 'Thanks for sharing.' }
+        ]
       })
   
+      const addComment = () => {
+        if (newComment.value.trim()) {
+          comments.value.push({
+            id: comments.value.length + 1,
+            text: newComment.value
+          })
+          newComment.value = ''
+        }
+      }
+  
       return {
-        currentTime
+        comments,
+        newComment,
+        addComment
       }
     }
   })

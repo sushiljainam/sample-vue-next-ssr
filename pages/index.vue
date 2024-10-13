@@ -1,25 +1,21 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
-    <p>{{ description }}</p>
-    <ClientOnlyComponent />
-  </div>
+    <div>
+        <h1>My Blog</h1>
+        <ul>
+            <li v-for="post in posts" :key="post.slug">
+                <NuxtLink :to="`/posts/${post.slug}`">{{ post.title }}</NuxtLink>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import ClientOnlyComponent from '../components/ClientOnlyComponent.vue'
+import { defineComponent } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-  components: {
-    ClientOnlyComponent
-  },
-  async asyncData({ $content }) {
-    const data = await $content('data').fetch()
-    return {
-      title: data.title,
-      description: data.description
-    }
+    async asyncData({ $content }) {
+        const posts = await $content('posts').only(['title', 'slug']).fetch()
+        return { posts }
   }
 })
 </script>
